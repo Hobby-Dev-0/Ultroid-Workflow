@@ -1,0 +1,28 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setting Env For Ultroid 
+      env:
+        SESSION: ${{secrets.SESSION}}
+        API_ID: ${{secrets.API_ID}}
+        API_HASH: ${{secrets.API_HASH}}
+        REDIS_URI: ${{secrets.REDIS_URI}}
+        REDIS_PASSWORD: ${{secrets.REDIS_PASSWORD}}
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile
+      
+    - name: Run Ultroid
+      run: python3 -m pyUltroid
